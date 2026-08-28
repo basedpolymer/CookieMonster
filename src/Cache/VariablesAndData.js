@@ -73,6 +73,8 @@ export let CacheMinPP = 0;
 export let CacheMinPPBulk = 0;
 /** Stores all PP values of all buildings for all buy settings (1, 10, 100) */
 export let CachePPArray = [];
+/** Stores the category of the lowest PP value ('bulk' or 'nextAchievement') */
+export let CacheMinPPCategory = 'bulk';
 
 export let CacheGoldenShimmersByID = {};
 

@@ -107,6 +107,35 @@ function MouseCps() {
 }
 
 /**
+ * This function applies the purchase of an upgrade to the current sim data
+ * It only mutates the sim data: it does not call CopyData() nor CalculateGains()
+ * It is called by BuyUpgradesBonusIncome() and by the purchase planner
+ * @param	{string}	upgrade		The name of the upgrade to be bought
+ */
+export function ApplyUpgradePurchase(upgrade) {
+  if (SimUpgrades[upgrade].name === 'Shimmering veil [on]') {
+    SimUpgrades['Shimmering veil [off]'].bought = 0;
+  } else if (SimUpgrades[upgrade].name === 'Golden switch [on]') {
+    SimUpgrades['Golden switch [off]'].bought = 0;
+  } else {
+    SimUpgrades[upgrade].bought = (SimUpgrades[upgrade].bought + 1) % 2;
+  }
+  if (Game.CountsAsUpgradeOwned(Game.Upgrades[upgrade].pool)) SimUpgradesOwned += 1;
+
+  if (upgrade === 'Elder Pledge') {
+    SimPledges += 1;
+    if (SimPledges > 0) SimWin('Elder nap');
+    if (SimPledges >= 5) SimWin('Elder slumber');
+  } else if (upgrade === 'Elder Covenant') {
+    SimWin('Elder calm');
+  } else if (upgrade === 'Prism heart biscuits') {
+    SimWin('Lovely cookies');
+  } else if (upgrade === 'Heavenly key') {
+    SimWin('Wholesome');
+  }
+}
+
+/**
  * This function calculates the bonus income of buying a building
  * It is called by CM.Cache.CacheBuildingIncome()
  * @param	{string}				building	The name of the upgrade to be bought
@@ -120,26 +149,7 @@ export default function BuyUpgradesBonusIncome(upgrade) {
       Game.Upgrades[upgrade].pool !== 'prestige')
   ) {
     CopyData();
-    if (SimUpgrades[upgrade].name === 'Shimmering veil [on]') {
-      SimUpgrades['Shimmering veil [off]'].bought = 0;
-    } else if (SimUpgrades[upgrade].name === 'Golden switch [on]') {
-      SimUpgrades['Golden switch [off]'].bought = 0;
-    } else {
-      SimUpgrades[upgrade].bought = (SimUpgrades[upgrade].bought + 1) % 2;
-    }
-    if (Game.CountsAsUpgradeOwned(Game.Upgrades[upgrade].pool)) SimUpgradesOwned += 1;
-
-    if (upgrade === 'Elder Pledge') {
-      SimPledges += 1;
-      if (SimPledges > 0) SimWin('Elder nap');
-      if (SimPledges >= 5) SimWin('Elder slumber');
-    } else if (upgrade === 'Elder Covenant') {
-      SimWin('Elder calm');
-    } else if (upgrade === 'Prism heart biscuits') {
-      SimWin('Lovely cookies');
-    } else if (upgrade === 'Heavenly key') {
-      SimWin('Wholesome');
-    }
+    ApplyUpgradePurchase(upgrade);
 
     const lastAchievementsOwned = SimAchievementsOwned;
 

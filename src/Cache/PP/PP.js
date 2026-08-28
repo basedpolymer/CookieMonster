@@ -5,6 +5,7 @@ import {
   CacheObjects1,
   CacheObjects10,
   CacheObjects100,
+  CacheObjectsNextAchievement,
   CacheUpgrades,
 } from '../VariablesAndData.js';
 import CacheBuildingsPP from './Building.js';
@@ -20,6 +21,9 @@ export default function CachePP() {
   window.CookieMonsterData.Objects1 = JSON.parse(JSON.stringify(CacheObjects1));
   window.CookieMonsterData.Objects10 = JSON.parse(JSON.stringify(CacheObjects10));
   window.CookieMonsterData.Objects100 = JSON.parse(JSON.stringify(CacheObjects100));
+  window.CookieMonsterData.ObjectsNextAchievement = JSON.parse(
+    JSON.stringify(CacheObjectsNextAchievement),
+  );
   window.CookieMonsterData.Upgrades = [];
   Object.entries(CacheUpgrades).forEach((i) => {
     window.CookieMonsterData.Upgrades[i[0]] = JSON.parse(JSON.stringify(i[1]));

@@ -1,5 +1,6 @@
 import {
   CacheMinPPBulk,
+  CacheMinPPCategory,
   CacheObjects1,
   CacheObjects10,
   CacheObjects100,
@@ -42,8 +43,12 @@ export default function UpdateBuildings() {
             `Colour${target[i].colour}`
           ];
       });
-      l(`storeBulk${CacheMinPPBulk}`).style.color =
-        Game.mods.cookieMonsterFramework.saveData.cookieMonsterMod.settings.ColourGreen;
+      // Only the storeBulk1/10/100 elements exist, so this may only run when the lowest
+      // PP comes from a bulk purchase (and not from a next-achievement purchase)
+      if (CacheMinPPCategory === 'bulk') {
+        l(`storeBulk${CacheMinPPBulk}`).style.color =
+          Game.mods.cookieMonsterFramework.saveData.cookieMonsterMod.settings.ColourGreen;
+      }
     } else {
       Object.keys(Game.Objects).forEach((i) => {
         l(`productPrice${Game.Objects[i].id}`).style.removeProperty('color');
@@ -134,6 +139,22 @@ export default function UpdateBuildings() {
       (a, b) =>
         (a.amountUntilNext !== 101 ? a.priceUntilNext : Infinity) -
         (b.amountUntilNext !== 101 ? b.priceUntilNext : Infinity),
+    );
+  } else if (
+    Game.mods.cookieMonsterFramework.saveData.cookieMonsterMod.settings.SortBuildings === 4
+  ) {
+    arr = Object.keys(CacheObjectsNextAchievement).map((k) => {
+      const o = {};
+      o.name = k;
+      o.pp = CacheObjectsNextAchievement[k].pp;
+      o.colour = CacheObjectsNextAchievement[k].colour;
+      return o;
+    });
+    // Sort by pp colour group, then by pp.
+    arr.sort((a, b) =>
+      ColoursOrdering.indexOf(a.colour) === ColoursOrdering.indexOf(b.colour)
+        ? a.pp - b.pp
+        : ColoursOrdering.indexOf(a.colour) - ColoursOrdering.indexOf(b.colour),
     );
   }
 

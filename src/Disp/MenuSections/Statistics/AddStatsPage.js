@@ -14,10 +14,12 @@ import {
   CacheWrinklersTotal,
 } from '../../../Cache/VariablesAndData.js';
 import PopAllNormalWrinklers from '../../HelperFunctions/PopWrinklers.js';
-import { ClickTimes, CookieTimes } from '../../VariablesAndData.js';
+import { ClickTimes, ColourTextPre, CookieTimes } from '../../VariablesAndData.js';
 import GetCPS from '../../HelperFunctions/GetCPS.js';
 import Beautify from '../../BeautifyAndFormatting/Beautify.js';
+import FormatTime from '../../BeautifyAndFormatting/FormatTime.js';
 import AddMissingAchievements from './CreateMissingAchievements.js';
+import PurchasePlanSection from './PurchasePlanSection.js';
 
 /**
  * This function adds stats created by CookieMonster to the stats page
@@ -104,20 +106,32 @@ export default function AddMenuStats(title) {
   if (Game.mods.cookieMonsterFramework.saveData.cookieMonsterMod.headers.Achievs) {
     Object.keys(Game.Objects).forEach((i) => {
       const ObjectsTillNext = CacheObjectsNextAchievement[i];
-      stats.appendChild(
-        CreateElements.StatsListing(
-          'basic',
-          i,
-          ObjectsTillNext.AmountNeeded < 101
-            ? document.createTextNode(
-                `Next achievement in ${ObjectsTillNext.AmountNeeded}, price: ${Beautify(
-                  ObjectsTillNext.price,
-                )}`,
-              )
-            : document.createTextNode('No new achievement for next 100 buildings'),
-        ),
-      );
+      let content;
+      if (ObjectsTillNext.AmountNeeded < 101) {
+        content = document.createDocumentFragment();
+        content.appendChild(
+          document.createTextNode(
+            `Next achievement in ${ObjectsTillNext.AmountNeeded}, price: ${Beautify(
+              ObjectsTillNext.price,
+            )}, PP: `,
+          ),
+        );
+        const PPFrag = document.createElement('span');
+        if (Game.mods.cookieMonsterFramework.saveData.cookieMonsterMod.settings.PPDisplayTime)
+          PPFrag.textContent = FormatTime(ObjectsTillNext.pp);
+        else PPFrag.textContent = Beautify(ObjectsTillNext.pp);
+        PPFrag.className = ColourTextPre + ObjectsTillNext.colour;
+        content.appendChild(PPFrag);
+      } else {
+        content = document.createTextNode('No new achievement for next 100 buildings');
+      }
+      stats.appendChild(CreateElements.StatsListing('basic', i, content));
     });
+  }
+
+  stats.appendChild(CreateElements.StatsHeader('Purchase plan', 'PurchasePlan'));
+  if (Game.mods.cookieMonsterFramework.saveData.cookieMonsterMod.headers.PurchasePlan) {
+    stats.appendChild(PurchasePlanSection());
   }
 
   stats.appendChild(CreateElements.StatsHeader('Miscellaneous', 'Misc'));

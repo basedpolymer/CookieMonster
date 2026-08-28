@@ -5,14 +5,13 @@ import SimWin from '../SimulationData/SimWin.js';
 import { SimAchievementsOwned, SimCookiesPs, SimObjects } from '../VariablesAndData.js';
 
 /**
- * This function calculates the bonus income of buying a building
- * It is called by CM.Cache.CacheBuildingIncome()
+ * This function applies the purchase of a building to the current sim data
+ * It only mutates the sim data: it does not call CopyData() nor CalculateGains()
+ * It is called by BuyBuildingsBonusIncome() and by the purchase planner
  * @param	{string}	building	The name of the building to be bought
  * @param	{number}	amount		The amount to be bought
- * @returns {number}				The bonus income of the building
  */
-export default function BuyBuildingsBonusIncome(building, amount) {
-  CopyData();
+export function ApplyBuildingPurchase(building, amount) {
   SimObjects[building].amount += amount;
   const me = SimObjects[building];
 
@@ -37,6 +36,18 @@ export default function BuyBuildingsBonusIncome(building, amount) {
       }
     });
   }
+}
+
+/**
+ * This function calculates the bonus income of buying a building
+ * It is called by CM.Cache.CacheBuildingIncome()
+ * @param	{string}	building	The name of the building to be bought
+ * @param	{number}	amount		The amount to be bought
+ * @returns {number}				The bonus income of the building
+ */
+export default function BuyBuildingsBonusIncome(building, amount) {
+  CopyData();
+  ApplyBuildingPurchase(building, amount);
 
   const lastAchievementsOwned = SimAchievementsOwned;
 

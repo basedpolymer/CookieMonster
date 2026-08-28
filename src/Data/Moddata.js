@@ -1,7 +1,7 @@
 /** Data related directly to Cookie Monster */
 
 export const VersionMajor = '2.053';
-export const VersionMinor = '10';
+export const VersionMinor = '12';
 
 /** Information about Cookie Monster to be displayed in the info section */
 export const ModDescription = `<a href="https://github.com/CookieMonsterTeam/CookieMonster" target="blank">Cookie Monster</a>

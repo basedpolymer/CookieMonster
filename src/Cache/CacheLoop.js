@@ -16,8 +16,10 @@ export default function LoopCache() {
   // Update Wrinkler Bank
   CacheWrinklers();
 
-  CachePP();
+  // Must run before CachePP() so that the PP of the next-achievement purchases uses
+  // an up-to-date AmountNeeded/price
   AllAmountTillNextAchievement(false);
+  CachePP();
   CacheCurrWrinklerCPS();
   CacheAvgCPS();
   CacheHeavenlyChipsPS();

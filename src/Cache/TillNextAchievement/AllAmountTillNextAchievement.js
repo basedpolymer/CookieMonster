@@ -8,28 +8,23 @@ import IndividualAmountTillNextAchievement from './IndividualAmountTillNextAchie
  * @param	{boolean}	forceRecalc	Whether a recalcution should be forced (after CPS change)
  */
 export default function AllAmountTillNextAchievement(forceRecalc) {
-  const result = {};
-
   Object.keys(Game.Objects).forEach((i) => {
-    if (
-      Object.keys(CacheObjectsNextAchievement).length !== 0 &&
-      CacheObjectsNextAchievement[i].TotalNeeded > Game.Objects[i].amount &&
-      !forceRecalc
-    ) {
-      result[i] = {
-        AmountNeeded: CacheObjectsNextAchievement[i].TotalNeeded - Game.Objects[i].amount,
-        TotalNeeded: CacheObjectsNextAchievement[i].TotalNeeded,
-        price: BuildingGetPrice(
-          i,
-          Game.Objects[i].basePrice,
-          Game.Objects[i].amount,
-          Game.Objects[i].free,
-          CacheObjectsNextAchievement[i].TotalNeeded - Game.Objects[i].amount,
-        ),
-      };
+    const prev = CacheObjectsNextAchievement[i];
+    if (prev && prev.TotalNeeded > Game.Objects[i].amount && !forceRecalc) {
+      // Mutate in place so that fields added by other cache functions (bonus, pp, colour)
+      // are not wiped every loop
+      prev.AmountNeeded = prev.TotalNeeded - Game.Objects[i].amount;
+      prev.price = BuildingGetPrice(
+        i,
+        Game.Objects[i].basePrice,
+        Game.Objects[i].amount,
+        Game.Objects[i].free,
+        prev.AmountNeeded,
+      );
     } else {
       const tillNext = IndividualAmountTillNextAchievement(i);
-      result[i] = {
+      CacheObjectsNextAchievement[i] = {
+        ...(prev || {}),
         AmountNeeded: tillNext,
         TotalNeeded: Game.Objects[i].amount + tillNext,
         price: BuildingGetPrice(
@@ -42,7 +37,6 @@ export default function AllAmountTillNextAchievement(forceRecalc) {
       };
     }
   });
-  CacheObjectsNextAchievement = result;
 
   FillCMDCache({ CacheObjectsNextAchievement });
 }

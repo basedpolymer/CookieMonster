@@ -25,6 +25,7 @@ const headers = {
   Wrink: 1,
   Sea: 1,
   Achievs: 1,
+  PurchasePlan: 1,
   Misc: 1,
   infoMenu: 1,
   optionsMenu: 1,

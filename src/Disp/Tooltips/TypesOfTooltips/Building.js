@@ -1,4 +1,3 @@
-import ColourOfPP from '../../../Cache/PP/ColourOfPP.js';
 import {
   CacheObjects1,
   CacheObjects10,
@@ -6,7 +5,6 @@ import {
   CacheObjectsNextAchievement,
 } from '../../../Cache/VariablesAndData.js';
 
-import BuyBuildingsBonusIncome from '../../../Sim/SimulationEvents/BuyBuildingBonusIncome.js';
 import { SimObjects } from '../../../Sim/VariablesAndData.js';
 import Beautify from '../../BeautifyAndFormatting/Beautify.js';
 import FormatTime from '../../BeautifyAndFormatting/FormatTime.js';
@@ -102,17 +100,7 @@ export default function Building() {
       l('CMTooltipProductionLeft').style.marginBottom = '4px';
       l('CMTooltipNextAchievementHeader').style.display = '';
 
-      let PPOfAmount;
-      if (Game.cookiesPs) {
-        PPOfAmount =
-          Math.max(ObjectsTillNext.price - (Game.cookies + GetWrinkConfigBank()), 0) /
-            Game.cookiesPs +
-          ObjectsTillNext.price /
-            BuyBuildingsBonusIncome(TooltipName, ObjectsTillNext.AmountNeeded);
-      } else
-        PPOfAmount =
-          ObjectsTillNext.price /
-          BuyBuildingsBonusIncome(TooltipName, ObjectsTillNext.AmountNeeded);
+      const PPOfAmount = ObjectsTillNext.pp;
 
       l('CMTooltipNextAchievement').textContent = `${Beautify(
         ObjectsTillNext.AmountNeeded,
@@ -122,7 +110,7 @@ export default function Building() {
       if (Game.mods.cookieMonsterFramework.saveData.cookieMonsterMod.settings.PPDisplayTime)
         PPFrag.textContent = FormatTime(PPOfAmount);
       else PPFrag.textContent = Beautify(PPOfAmount);
-      PPFrag.className = ColourTextPre + ColourOfPP({ pp: PPOfAmount }, ObjectsTillNext.price);
+      PPFrag.className = ColourTextPre + ObjectsTillNext.colour;
       l('CMTooltipNextAchievement').appendChild(PPFrag);
     } else {
       l('CMTooltipNextAchievementHeader').style.display = 'none';

@@ -194,6 +194,14 @@ const settings = {
     'Makes Cookie Monster ignore all "buy 1" options when colouring PP in order to stay at a total building count ending in 10 for pantheon god Rigidel',
     true,
   ),
+  PPNextAchievement: new settingClasses.SettingStandard(
+    1,
+    'bool',
+    'Colours',
+    ['Next achievement PP OFF', 'Next achievement PP ON'],
+    'Also consider buying exactly the amount of buildings needed to reach the next achievement (including the CPS boost from the achievement itself) when ranking and colouring Payback Periods',
+    true,
+  ),
   PPSecondsLowerLimit: new settingClasses.SettingInputNumber(
     0,
     'numscale',
@@ -339,6 +347,7 @@ const settings = {
       'Sort buildings: PP of x1 purchase',
       'Sort buildings: PP of selected bulk mode',
       'Sort buildings: price until next achievement',
+      'Sort buildings: PP until next achievement',
     ],
     'Sort the display of buildings in default order, by PP, or until next achievement',
     false,
@@ -623,6 +632,15 @@ const settings = {
     ['Missed GC OFF', 'Missed GC ON'],
     'Show a stat in the statistics screen that counts how many golden cookies you have missed',
     true,
+  ),
+  PlannerSteps: new settingClasses.SettingInputNumber(
+    8,
+    'numscale',
+    'Statistics',
+    'Purchases in the purchase plan: ',
+    'The amount of sequential purchases computed by the "Purchase plan" section of the statistics page; higher values take longer to compute',
+    1,
+    15,
   ),
 
   // Notification

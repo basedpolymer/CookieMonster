@@ -1,6 +1,7 @@
 import GetWrinkConfigBank from '../../Disp/HelperFunctions/GetWrinkConfigBank.js';
 import { CacheUpgrades } from '../VariablesAndData.js';
 import ColourOfPP from './ColourOfPP.js';
+import ComputePP from './ComputePP.js';
 
 /**
  * This functions caches the PP of each building it saves all date in CM.Cache.Upgrades
@@ -8,13 +9,12 @@ import ColourOfPP from './ColourOfPP.js';
  */
 export default function CacheUpgradePP() {
   Object.keys(CacheUpgrades).forEach((i) => {
-    if (Game.cookiesPs) {
-      CacheUpgrades[i].pp =
-        Math.max(Game.Upgrades[i].getPrice() - (Game.cookies + GetWrinkConfigBank()), 0) /
-          Game.cookiesPs +
-        Game.Upgrades[i].getPrice() / CacheUpgrades[i].bonus;
-    } else CacheUpgrades[i].pp = Game.Upgrades[i].getPrice() / CacheUpgrades[i].bonus;
-    if (Number.isNaN(CacheUpgrades[i].pp)) CacheUpgrades[i].pp = Infinity;
+    CacheUpgrades[i].pp = ComputePP(
+      Game.Upgrades[i].getPrice(),
+      CacheUpgrades[i].bonus,
+      Game.cookies + GetWrinkConfigBank(),
+      Game.cookiesPs,
+    );
 
     CacheUpgrades[i].colour = ColourOfPP(CacheUpgrades[i], Game.Upgrades[i].getPrice());
   });

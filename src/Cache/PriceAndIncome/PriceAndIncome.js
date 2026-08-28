@@ -35,6 +35,24 @@ function CacheBuildingIncome(amount) {
 }
 
 /**
+ * This functions simulates buying exactly the amount of buildings needed to reach
+ * the next achievement and stores the bonus income in CacheObjectsNextAchievement
+ * It must be called after AllAmountTillNextAchievement()
+ */
+function CacheBuildingIncomeNextAchievement() {
+  Object.keys(Game.Objects).forEach((i) => {
+    const target = CacheObjectsNextAchievement[i];
+    if (!target) return;
+    if (!(target.AmountNeeded < 101)) {
+      target.bonus = 0;
+      return;
+    }
+    target.bonus = BuyBuildingsBonusIncome(i, target.AmountNeeded);
+  });
+  CacheDoRemakeBuildPrices = 1;
+}
+
+/**
  * This functions starts the calculation/simulation of the bonus income of upgrades
  * It is called by CM.Cache.CacheIncome()
  */
@@ -107,6 +125,9 @@ export function CacheIncome() {
   CacheObjects1 = CacheBuildingIncome(1);
   CacheObjects10 = CacheBuildingIncome(10);
   CacheObjects100 = CacheBuildingIncome(100);
+
+  // Simulate buying exactly the amount needed for the next achievement
+  CacheBuildingIncomeNextAchievement();
 
   // Simulate Upgrade Buys
   CacheUpgradeIncome();
