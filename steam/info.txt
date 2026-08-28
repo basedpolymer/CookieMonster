@@ -1,0 +1,10 @@
+{
+ "Name": "Cookie Monster",
+ "ID": "CookieMonster",
+ "Author": "Cookie Monster Team",
+ "Description": "Affiche le temps de retour sur investissement, le PP (y compris jusqu'au prochain achievement), un planificateur d'achats optimaux, les bonus de cookies dores, les statistiques detaillees et une foule d'infos utiles pour optimiser votre partie.",
+ "ModVersion": 12,
+ "GameVersion": 2.053,
+ "Date": "28/08/2026",
+ "AllowSteamAchievs": 1
+}
