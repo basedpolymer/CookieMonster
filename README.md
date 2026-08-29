@@ -4,7 +4,7 @@ A fork of [CookieMonsterTeam/CookieMonster](https://github.com/CookieMonsterTeam
 
 Like upstream, this is not a cheat interface. It reads the game and shows you numbers, it does not play for you. On Steam the mod declares `AllowSteamAchievs: 1`, so Steam achievements stay enabled.
 
-Built against Cookie Clicker 2.053. Works on the web version (orteil.dashnet.org/cookieclicker) and on Steam.
+Built against Cookie Clicker 2.053 (Steam). Verified working on the current web version (2.058, orteil.dashnet.org/cookieclicker) and on Steam.
 
 ## What this fork adds
 
