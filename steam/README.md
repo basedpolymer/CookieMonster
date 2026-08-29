@@ -1,33 +1,43 @@
-# Installation sur Cookie Clicker Steam
+# Installing on Cookie Clicker (Steam)
 
-Ce dossier permet d'installer ce fork de Cookie Monster (avec le PP « jusqu'au prochain achievement » et le Purchase Planner) sur la version Steam du jeu, **sans chaîne de build** : le bundle compilé est déjà dans `dist/CookieMonster.js`.
+This fork of Cookie Monster runs on the Steam version as a local mod. Built against game version 2.053.
 
-## Étapes
+## Option A: release zip (recommended)
 
-1. Aller dans le dossier du jeu :
+1. Download `CookieMonster-Steam-v12.zip` from the [latest release](https://github.com/basedpolymer/CookieMonster/releases/latest).
+2. Open the local mods folder:
    `...\Steam\steamapps\common\Cookie Clicker\resources\app\mods\local\`
-2. Y créer un dossier `CookieMonster` (le supprimer d'abord s'il existe déjà, après sauvegarde éventuelle).
-3. Copier **`dist/CookieMonster.js`** (à la racine du dépôt) dans ce dossier et le renommer **`main.js`**.
-4. Copier **`steam/info.txt`** (ce dossier) à côté, tel quel.
-5. Lancer le jeu → Options → **Gérer les mods** → activer *Cookie Monster* si nécessaire → redémarrer le jeu.
+   From inside the game you can also use Options → Mods → Manage mods → "Open /mods folder", then go into `local`.
+3. Extract the zip there. The zip already contains the `CookieMonster` folder, so you should end up with:
 
-Arborescence finale :
+   ```
+   mods\local\CookieMonster\
+   ├── info.txt
+   └── main.js
+   ```
 
-```
-mods\local\CookieMonster\
-├── info.txt
-└── main.js        (copie de dist/CookieMonster.js)
-```
+   If a `CookieMonster` folder is already there, delete it first (or move it aside).
 
-## Réglages
+4. Start the game, go to Options → Mods, and enable Cookie Monster.
+5. Restart the game.
 
-- Les fonctionnalités du fork sont actives par défaut : `PPNextAchievement` (classement des couleurs incluant les achats « prochain achievement ») et le planificateur (menu Stats → section **Purchase plan**, nombre d'achats réglable via `PlannerSteps`, section Statistics des options).
-- Les réglages Cookie Monster sont stockés **dans la sauvegarde du jeu** (`resources\app\save\save.cki`), pas dans le mod. Avec le même compte Steam et Steam Cloud activé, ils se synchronisent automatiquement entre machines (réglages optimisés du 28/08/2026 compris).
+## Option B: build it yourself
 
-## Mise à jour du mod
+1. Build the bundle from the repo root: `npm run build-final` (see the "Building from source" section of the main [README](../README.md); `npm install` needs a GitHub Packages token).
+2. Create `mods\local\CookieMonster\` in the game folder.
+3. Copy `dist/CookieMonster.js` there and rename it to `main.js`.
+4. Copy `steam/info.txt` next to it, unchanged.
+5. Enable the mod and restart, same as steps 4 and 5 above.
 
-Après un nouveau commit sur ce dépôt : re-copier `dist/CookieMonster.js` vers `main.js` et mettre à jour `ModVersion`/`Date` dans `info.txt` du dossier du jeu.
+## Settings
 
-## Reconstruire depuis les sources (optionnel)
+Cookie Monster's settings live in your game save (`resources\app\save\save.cki`), not in the mod folder. Replacing the mod files never resets them, and with Steam Cloud they follow your account across machines.
 
-La dépendance `@cookiemonsterteam/cookiemonsterframework` (0.2.3) est hébergée sur GitHub Packages : `npm install` requiert un PAT avec le scope `read:packages` (variable `GITHUB_REGISTRY_PAT`), ou vendoriser le paquet dans `node_modules` depuis son dépôt public (tag `0.2.3`). Ensuite : `npm run eslint`, `npm test`, `npm run pack-final`.
+The two fork features are on by default:
+
+- `PPNextAchievement` (Colours section): next-achievement buys are included in the PP colour ranking.
+- Purchase planner: Stats menu → Purchase plan section. The number of purchases is set by `PlannerSteps` in the Statistics section of the options.
+
+## Updating
+
+Replace `main.js` with the new build, bump `ModVersion` and `Date` in the game folder's `info.txt` to keep track of what you're running, and restart the game (mods are only loaded at startup).
